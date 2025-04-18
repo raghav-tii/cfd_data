@@ -16,18 +16,21 @@ def compute_dmd(data_matrix, rank):
 
 
 def preprocess_exodus_data(exodus_file, output_file):
-    # Step 1: Read simulation data (assume velocities are returned as a 3D array: [time, nodes, components])
+    # Step 1: Read simulation data (assumes velocities are returned as a 3D array: [time, nodes, components])
     times, velocities = read_exodus_file(exodus_file)
-    time_steps = times[:-1] - times[1:]
+    time_steps = (
+        times[:-1] - times[1:]
+    )  # Right now this is just all ones due to the dataset
+
     print("Loaded data from the files successfully!")
     print("Shape of times array: ", times.shape)
     print("Shape of velocities array: ", velocities.shape)
 
     # Step 2: Reshape velocities for DMD (flatten spatial dimensions)
     num_times, num_nodes, num_components = velocities.shape
-    data_matrix = velocities.reshape(
-        num_times, -1
-    ).T  # shape: (num_nodes*num_components, num_times)
+    
+    data_matrix = velocities.reshape(num_times, -1).T
+    # shape: (num_nodes*num_components, num_times)
 
     # Step 3: Compute DMD
     rank = 10
@@ -43,7 +46,7 @@ def preprocess_exodus_data(exodus_file, output_file):
     time_derivatives = time_steps.reshape(-1, 1) * (
         transformed_timeseries[:-1, :] - transformed_timeseries[1:, :]
     )
-    print("Shape of time_derivatives array: ",time_derivatives.shape)
+    print("Shape of time_derivatives array: ", time_derivatives.shape)
 
     # Step 6: Save transformed timeseries
     np.savez_compressed(
