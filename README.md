@@ -12,3 +12,8 @@ This folder contains files to process 2D CFD simulation data from the [dataset](
     ```
 
 - Have fun with the `dmd_test.py` file but remember that these functions are used in preprocessing. So make changes at your own discretion.
+
+## Important note
+
+- Have fun, stay hydrated and apply sunscreen.
+- Remember, discretion is the better part of valour.
